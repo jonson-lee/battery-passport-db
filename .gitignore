@@ -39,3 +39,10 @@ tmp/
 .env
 *.pem
 *.key
+
+# ---------------------------------------------------------------------------
+# Course/instructor materials (kept local, not redistributed)
+# ---------------------------------------------------------------------------
+Group Project Requirement.pdf
+Group Project Contribution Form.pdf
+00_项目要求速览.md

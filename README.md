@@ -54,8 +54,6 @@ docs/
   NEXT.md                                # next actions and milestone sequence
 scripts/
   validate_public_battery_data.py        # reproducible dataset validator
-Group Project Requirement.pdf            # course document
-Group Project Contribution Form.pdf      # course document
 ```
 
 ---
