@@ -7,8 +7,8 @@
 
 **Status (2026-11-26) | 当前状态** — Conceptual design and all five module data snapshots are complete.
 The final integrated database (`data/final/IBA6151_Integrated.sqlite`) contains **27 tables, 14 views,
-44 triggers and 59 indexes**. PostgreSQL implementation is the active engineering track; see the
-[development plan, milestones and work division](docs/DEVELOPMENT_PLAN.md). The SQLite snapshots remain
+44 triggers and 59 indexes**. PostgreSQL implementation is the only active track; see the
+[DBMS delivery plan](docs/DEVELOPMENT_PLAN.md). Report, slides, presentation rehearsal and the web app are deferred until the database passes its 2026-12-04 gate. The SQLite snapshots remain
 the data-stage handover and the demo fallback if the PostgreSQL port misses its 2026-11-30 gate.
 
 > 概念设计与五个板块的数据快照已完成，全组合库为 27 表 / 14 视图 / 44 触发器。PostgreSQL 实施是当前主线，
