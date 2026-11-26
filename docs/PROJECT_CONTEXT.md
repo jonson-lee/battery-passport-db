@@ -1,7 +1,7 @@
 # IBA6151 Group Project Context
 
 **Status:** Go — topic and evidence boundary locked  
-**Last updated:** 2026-09-12  
+**Last updated:** 2026-11-06
 **Course:** IBA6151 Database Management, Fall 2026
 
 **Implementation DBMS:** PostgreSQL
@@ -82,7 +82,7 @@ The MVP will not include:
 
 ## Proposed relational boundary
 
-The core business model is expected to use approximately 10–12 tables:
+The initial business-model draft targeted approximately 10–12 tables:
 
 - `Organization`
 - `BatteryUnit`
@@ -95,6 +95,48 @@ The core business model is expected to use approximately 10–12 tables:
 - `LeaseContractItem`
 - `MaintenanceEvent`
 - `LifecycleEvent`
+
+**2026-10-14 conceptual-design proposal (pending instructor review):** Add
+`AssessmentEvidence` as the twelfth core entity to link assessments and diagnostic tests.
+Model `MaintenanceEvent` as a partial subtype of `LifecycleEvent`, with a shared event key.
+The proposed cardinalities, optionality, organization roles, asset-target XOR, and
+state-dependent requirements are documented in
+[the instructor discussion draft](archive/2026-10/2026-10-14_教师讨论材料.md), rules R01–R12.
+These are recommendations, not approved business rules or implemented constraints.
+
+**2026-10-16 business-analysis update:** The user confirmed mainland China as the
+business jurisdiction and requested entity identification from industry workflows
+before deciding relationships or EER notation. The
+[pack assembly and maintenance entity analysis](archive/2026-10/2026-10-16_组包与维护业务实体分析.md)
+has been reviewed against LN3–LN5 to distinguish entities, attributes, relationships
+and associative structures. The earlier blanket classification of nine core entity
+candidates is withdrawn. Pack identity and actual maintenance records remain entity
+candidates; membership is reviewed as an attributed relationship/associative entity.
+Specifications, configurations, jobs, inspections, release decisions and work orders
+require separate requirement and classification checks. This is not an accepted
+schema or a completed relationship model. The earlier entity-count target must
+not remove necessary business facts. The existing `BatteryUnit` cell-level evidence
+boundary remains in force. Mainland application eligibility requires a specific
+product/use/scale review against current requirements; “small energy storage” alone
+does not establish a permitted use. See the analysis for the verified 2026 policy
+changes and source boundaries.
+
+**2026-11-06 current module-4 requirements proposal:** The user confirmed ownership
+of module 4 against the local assignment document and reported instructor feedback that
+the entity set was insufficient. No consultation date, required count, or item-by-item
+approval was provided. The [current requirements](2026-11-06_组包与维护需求说明.md) propose retaining `BatteryPack`,
+`BatteryPackUnit` (membership occurrence / associative entity), and `MaintenanceEvent`,
+and adding `AssemblyJob`, `PackInspection`, and `ServiceRelease`. The additions are
+requirements proposals, not accepted schema changes. Specification attributes and
+temporal membership remain the initial representation for specifications and composition;
+separate specifications, configuration versions and maintenance work orders are deferred.
+Inspection must be coordinated with module 2; purpose and leasing rules with modules 3
+and 5; shared identity and event semantics with module 1. A four-view
+[module-4 Chen ER/EER v0.1 review draft](2026-11-06_第四板块ER建模说明.md) is now available,
+with editable diagrams, identifiers, a conceptual attribute dictionary and explicit
+temporal/source rules. It is a proposed local model, not an approved merged schema;
+ownership and eligibility-evidence interfaces still need neighboring-module review.
+No DDL is included. The historical 10–12 count is not a current ceiling.
 
 High-volume public measurements will be loaded into a separate technical/staging table such as `DiagnosticMeasurement`, then summarized into `DiagnosticTest`. This keeps the conceptual business model focused while still demonstrating realistic ingestion, indexing, and aggregation.
 
@@ -145,4 +187,6 @@ The project is successful if it delivers:
 - The source has voltage and timestamp curves but not complete real-world BMS telemetry.
 - One short startup segment contains implausibly low voltage values and requires a quality flag.
 - Course documents contain slightly inconsistent final-presentation/report dates; the LMS must be checked before submission planning.
-- Group member names, student IDs, and final role allocation are not yet available.
+- Business-module claims are recorded in the local assignment document; the user confirmed
+  module-4 ownership on 2026-11-06. Personal names and student IDs remain outside the repository.
+- The next review date and acceptance of the current module-4 proposal remain unconfirmed.
