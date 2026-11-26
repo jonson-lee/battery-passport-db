@@ -1,0 +1,7 @@
+# Binary assets: keep Git from treating these as text
+*.sqlite binary
+*.sqlite3 binary
+*.png binary
+*.pdf binary
+*.docx binary
+*.drawio binary

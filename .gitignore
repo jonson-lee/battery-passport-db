@@ -24,6 +24,7 @@ env/
 # Raw data: large datasets stay local only (see data/README.md)
 # ---------------------------------------------------------------------------
 data/raw/
+data/part3_handover/
 *.zip
 
 # ---------------------------------------------------------------------------
@@ -46,3 +47,19 @@ tmp/
 Group Project Requirement.pdf
 Group Project Contribution Form.pdf
 00_项目要求速览.md
+
+# ---------------------------------------------------------------------------
+# SQLite runtime journals (database opened in place)
+# ---------------------------------------------------------------------------
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite-journal
+*.db-wal
+*.db-shm
+
+# ---------------------------------------------------------------------------
+# Local environment overrides (keep the template)
+# ---------------------------------------------------------------------------
+.env.*
+!.env.example
+*.log
