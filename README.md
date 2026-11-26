@@ -5,6 +5,15 @@
 >
 > 面向小型储能运营商的电池护照与二次利用资格租赁数据库设计。IBA6151《数据库管理》小组课程项目。
 
+**Status (2026-11-26) | 当前状态** — Conceptual design and all five module data snapshots are complete.
+The final integrated database (`data/final/IBA6151_Integrated.sqlite`) contains **27 tables, 14 views,
+44 triggers and 59 indexes**. PostgreSQL implementation is the active engineering track; see the
+[development plan, milestones and work division](docs/DEVELOPMENT_PLAN.md). The SQLite snapshots remain
+the data-stage handover and the demo fallback if the PostgreSQL port misses its 2026-11-30 gate.
+
+> 概念设计与五个板块的数据快照已完成，全组合库为 27 表 / 14 视图 / 44 触发器。PostgreSQL 实施是当前主线，
+> 排期与分工见[开发计划](docs/DEVELOPMENT_PLAN.md)；SQLite 快照保留为数据阶段交接物与演示兜底。
+
 ---
 
 ## Overview | 项目概述
@@ -43,26 +52,65 @@ not replace certified safety testing or regulatory approval.
 ## Repository structure | 仓库结构
 
 ```
-data/
-  README.md                              # provenance, license, coverage
-  raw/                                   # public curves (git-ignored, local only)
-docs/
-  PROJECT_CONTEXT.md                     # scope, users, MVP boundary
-  DBMS_CLASSIFICATION.md                 # course classification rationale
-  DATA_AUDIT.md                          # acquisition and quality checks
-  DECISIONS.md                           # locked design decisions
-  NEXT.md                                # next actions and milestone sequence
-scripts/
-  validate_public_battery_data.py        # reproducible dataset validator
+.
+├── README.md                     # this file
+├── requirements.txt
+├── .env.example                  # connection template (no credentials)
+├── docs/
+│   ├── DEVELOPMENT_PLAN.md       # workflow, milestones, gates, work division
+│   ├── README.md                 # document index
+│   ├── PROJECT_CONTEXT.md        # scope, users, MVP boundary
+│   ├── DBMS_CLASSIFICATION.md    # course classification and DBMS rationale
+│   ├── DATA_AUDIT.md             # acquisition and quality checks
+│   ├── DECISIONS.md              # locked design decisions
+│   ├── NEXT.md                   # requirements and implementation backlog
+│   ├── 2026-11-*.md              # module-4 ER, requirements, relational, data notes
+│   ├── diagrams/                 # module-4 ER/EER sources and merge draft
+│   └── archive/2026-10/          # historical discussion and source analysis
+├── sql/
+│   ├── section4_*.sql            # SQLite data-stage DDL, views, event add-on
+│   └── postgres/                 # PostgreSQL implementation (see plan)
+├── scripts/
+│   ├── validate_public_battery_data.py
+│   ├── generate_section4_data.py
+│   ├── validate_section4_data.py
+│   └── merge_section4_data.py
+└── data/
+    ├── README.md                 # provenance, license, snapshots
+    ├── raw/                      # public curves (git-ignored, local only)
+    ├── section1|2|4_*.sqlite     # module data snapshots
+    ├── section4_previews/        # per-table 10-row previews
+    └── final/                    # integrated 27-table database + ERD + system report
 ```
 
 ---
 
 ## Design and MVP scope | 设计与 MVP 范围
 
-- **Core model (~10–12 tables):** `Organization`, `BatteryUnit`, `DiagnosticTest`,
+- **Historical starting model (entity count under review):** `Organization`, `BatteryUnit`, `DiagnosticTest`,
   `EligibilityAssessment`, `BatteryPack`, `BatteryPackUnit`, `StorageProject`, `LeaseContract`,
   `LeaseContractItem`, `MaintenanceEvent`, `LifecycleEvent`.
+- **2026-10-14 proposal (pending instructor review):** add `AssessmentEvidence` for
+  a 12-entity model and treat `MaintenanceEvent` as a `LifecycleEvent` subtype.
+  See [教师讨论材料：ER/EER 草图与待确认规则](docs/archive/2026-10/2026-10-14_教师讨论材料.md).
+- **2026-10-16 historical review:** mainland China is the confirmed business jurisdiction.
+  Identify entities before relationships and EER; the original entity count is a
+  scope target, not proof of business completeness. See
+  [历史组包与维护业务实体分析](docs/archive/2026-10/2026-10-16_组包与维护业务实体分析.md)
+  for industry sources and the LN3–LN5 review of entities, attributes, relationships
+  and associative structures. The earlier blanket nine-core-candidate classification
+  is withdrawn. The revised inventory has not replaced the draft schema.
+- **2026-11-06 current module-4 proposal:** the user confirmed instructor feedback that
+  the entity set was insufficient; the meeting date and a required count were not specified.
+  [组包与维护需求说明](docs/2026-11-06_组包与维护需求说明.md) proposes retaining pack, membership and maintenance,
+  and adding actual assembly work, pack inspection and a business-use decision. These are
+  six business-object categories including an associative entity and a proposed event subtype,
+  not six ordinary entities or an approved project-wide count. Specification, configuration
+  and work orders remain conditional. See [文档索引](docs/README.md) for current and historical sources.
+- **2026-11-06 module-4 conceptual draft:** [Chen ER/EER v0.1 and dictionary](docs/2026-11-06_第四板块ER建模说明.md)
+  now provide four diagram views and editable draw.io. Source XOR, temporal composition,
+  inspection evidence and maintenance inheritance are explicit review proposals;
+  cross-module ownership and eligibility-evidence links still need merge review.
 - **High-volume measurements:** loaded into a technical/staging table (e.g. `DiagnosticMeasurement`)
   and summarized into `DiagnosticTest`.
 - **Design flow:** requirement analysis → ER/EER → logical mapping to 3NF → PostgreSQL DDL with keys,
@@ -98,6 +146,9 @@ override.
    import/transform scripts, constraints/views/transactions/indexes, synthetic data generator.
 3. **Verification & deliverables** — SQL test cases, integrity and data-quality checks, representative
    analysis, English report, presentation deck.
+
+> Execution-level dates, gates, task breakdown and ownership: [docs/DEVELOPMENT_PLAN.md](docs/DEVELOPMENT_PLAN.md)
+> (frozen 2026-11-26; PostgreSQL gate on 2026-11-30, code freeze on 2026-12-06).
 
 ---
 
